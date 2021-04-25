@@ -1,0 +1,90 @@
+﻿@model IEnumerable<Logictrack_listado.Models.Despacho>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.idDespacho)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fechaCreacion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fechaDespacho)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.direccionEntrega)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.observacion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.estado)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.idSolicitante)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.idRecepcionista)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.idTransportista)
+        </th>
+        <th>
+            editar
+        </th>
+        <th>
+            eliminar
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            <button type="button" value="Details" class="btn btn-primary">
+                @Html.ActionLink("-", "Details", new { id = item.idDespacho })
+                @Html.DisplayFor(modelItem => item.idDespacho)
+            </button>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fechaCreacion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fechaDespacho)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.direccionEntrega)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.observacion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.estado)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.idSolicitante)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.idRecepcionista)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.idTransportista)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ })
+        </td>
+        <td>
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>
