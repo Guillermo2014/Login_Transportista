@@ -312,9 +312,15 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Cliente.cs" />
+    <Compile Include="Models\CondicionMedicamento.cs" />
     <Compile Include="Models\Despacho.cs" />
+    <Compile Include="Models\DetalleDespacho.cs" />
     <Compile Include="Models\Empresa.cs" />
     <Compile Include="Models\Login.cs" />
+    <Compile Include="Models\LogMedicamento.cs" />
+    <Compile Include="Models\Medicamento.cs" />
+    <Compile Include="Models\Proveedor.cs" />
+    <Compile Include="Models\Representante.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -327,6 +333,8 @@
     <Content Include="Views\Despacho\Index.cshtml" />
     <Content Include="Views\Login\Create.cshtml" />
     <Content Include="Views\Login\ErroLogin.cshtml" />
+    <Content Include="Views\Despacho\Details.cshtml" />
+    <Content Include="Views\Despacho\Seguimiento.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

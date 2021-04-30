@@ -1,14 +1,21 @@
 ﻿using Logictrack_listado.API;
 using Logictrack_listado.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http.Extensions;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using ActionResult = System.Web.Mvc.ActionResult;
+using HttpPostAttribute = System.Web.Mvc.HttpPostAttribute;
+using JsonResult = System.Web.Mvc.JsonResult;
+using System.Data;
 
 namespace Logictrack_listado.Controllers
 {
@@ -21,7 +28,7 @@ namespace Logictrack_listado.Controllers
             List<Despacho> despachos = new List<Despacho>();
             HttpClient client = _api.Initial();
             //HttpResponseMessage response = await client.GetAsync("despachosPorTransportista" + $"/{id}");
-            var uri = "despachosPorTransportista/" + HttpContext.Session["IdTransportista"].ToString();
+            var uri = "despachosPorTransportista/" + HttpContext.Session["IdTransportista"];
             HttpResponseMessage response = await client.GetAsync(uri);
             //HttpResponseMessage response = await client.GetAsync("despachos");
             if (response.IsSuccessStatusCode)
@@ -30,6 +37,114 @@ namespace Logictrack_listado.Controllers
                 despachos = JsonConvert.DeserializeObject<List<Despacho>>(result);
             }
             return View(despachos);
+        }
+
+        public async Task<ActionResult> Details(int id)
+        {
+            List<Despacho> despachos = new List<Despacho>();
+            HttpClient client = _api.Initial();
+            HttpContext.Session["IdDespacho"] = id;
+            HttpResponseMessage response = await client.GetAsync("despachos");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                despachos = JsonConvert.DeserializeObject<List<Despacho>>(result);
+
+            }
+
+            Despacho despacho = new Despacho();
+
+            for (int i = 0; i < despachos.Count(); i++)
+            {
+                if (id == despachos[i].idDespacho)
+                {
+                    despacho = despachos[i];
+
+                    for (int k = 0; k < despacho.detallesDespacho.Count(); k++)
+                    {
+                        List<Medicamento> medicamentos = new List<Medicamento>();
+
+                        HttpResponseMessage response2 = await client.GetAsync("medicamentos");
+                        if (response2.IsSuccessStatusCode)
+                        {
+                            var result2 = response2.Content.ReadAsStringAsync().Result;
+                            medicamentos = JsonConvert.DeserializeObject<List<Medicamento>>(result2);
+                            for (int j = 0; j < medicamentos.Count(); j++)
+                            {
+                                if (despacho.detallesDespacho[k].idMedicamento == medicamentos[j].IdMedicamento)
+                                {
+                                    despacho.detallesDespacho[k].medicamento = medicamentos[j];
+                                }
+                            }
+
+                        }
+
+                    }
+                }
+            }
+
+            return View(despacho);
+        }
+
+        public ActionResult Seguimiento()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        public async Task<JsonResult> CrearGraficaSeguimiento()
+        {
+
+           /* if (HttpContext.Session["IdTransportista"] == null)
+            {
+                HttpContext.Session.SetString("idSolicitud", "3");
+                HttpContext.Session["IdTransportista"]("", "");
+            }¨*/
+
+            List<LogMedicamento> seguimiento = new List<LogMedicamento>();
+            HttpClient client = _api.Initial();
+            var uri = "logsMedicionesPorDespacho/" + HttpContext.Session["idDespacho"];
+            HttpResponseMessage response = await client.GetAsync(uri);
+
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                seguimiento = JsonConvert.DeserializeObject<List<LogMedicamento>>(result);
+            }
+
+
+            List<object> iData = new List<object>();
+            //Creating sample data  
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Expense", System.Type.GetType("System.String"));
+            dt.Columns.Add("ExpenseValuesMin", System.Type.GetType("System.Int32"));
+            dt.Columns.Add("ExpenseValuesMax", System.Type.GetType("System.Int32"));
+            dt.Columns.Add("ExpenseValuesMedicion", System.Type.GetType("System.Int32"));
+
+            for (int i = 0; i < seguimiento.Count(); i++)
+            {
+                DataRow dr = dt.NewRow();
+                dr["Expense"] = seguimiento[i].hora;
+                dr["ExpenseValuesMin"] = seguimiento[i].valorMinimo;
+                dr["ExpenseValuesMax"] = seguimiento[i].valorMaximo;
+                dr["ExpenseValuesMedicion"] = seguimiento[i].valorMedicion;
+                dt.Rows.Add(dr);
+
+            }
+
+            //Looping and extracting each DataColumn to List<Object>  
+            foreach (DataColumn dc in dt.Columns)
+            {
+                List<object> x = new List<object>();
+                x = (from DataRow drr in dt.Rows select drr[dc.ColumnName]).ToList();
+                iData.Add(x);
+            }
+            ViewBag.ChartData = iData;
+            //Source data returned as JSON  
+            return Json(iData);
         }
     }
 }

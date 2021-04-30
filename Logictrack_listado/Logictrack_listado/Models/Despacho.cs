@@ -15,7 +15,11 @@ namespace Logictrack_listado.Models
         public string estado { get; set; }
         public int idSolicitante { get; set; }
         public int idRecepcionista { get; set; }
-        public int idTransportista { get; set; }
-        //public Cliente cliente { get; set; }
+        // int idTransportista { get; set; }
+        public Cliente solicitante { get; set; }
+
+        public Cliente recepcionista { get; set; }
+
+        public List<DetalleDespacho> detallesDespacho { get; set; }
     }
 }
