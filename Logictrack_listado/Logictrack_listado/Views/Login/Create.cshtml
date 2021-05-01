@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @using (Html.BeginForm())
@@ -31,22 +32,22 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input id="login" type="submit" value="Login" class="btn btn-default" />
+                <input id="login" type="submit" value="Login" class="btn btn-primary" />
             </div>
             @if (!string.IsNullOrEmpty(ViewBag.Message))
             {
-        <div class="alert alert-danger" role="alert" style="margin-top:50px">
-            @ViewBag.Message
-        </div>
+                <div class="alert alert-danger" role="alert" style="margin-top:50px">
+                    @ViewBag.Message
+                </div>
             }
         </div>
 
     </div>
 }
 
-<div>
+<!--<div>
     @Html.ActionLink("Back to List", "Index")
-</div>
+</div>-->
 
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>
 <script src="~/Scripts/jquery.validate.min.js"></script>

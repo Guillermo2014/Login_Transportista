@@ -16,5 +16,9 @@ textarea {
     max-width: 280px;
 }
 
+th {
+    text-align: center;
+}
+
 
 
