@@ -335,6 +335,9 @@
     <Content Include="Views\Login\ErroLogin.cshtml" />
     <Content Include="Views\Despacho\Details.cshtml" />
     <Content Include="Views\Despacho\Seguimiento.cshtml" />
+    <Content Include="Views\Despacho\DetailsDespacho.cshtml" />
+    <Content Include="Views\Despacho\EditarDespacho.cshtml" />
+    <Content Include="Views\Despacho\DetailsDespachoA.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
